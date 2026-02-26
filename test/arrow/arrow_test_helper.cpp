@@ -4,6 +4,7 @@
 #include "duckdb/main/relation/setop_relation.hpp"
 #include "duckdb/main/relation/materialized_relation.hpp"
 #include "duckdb/common/enums/set_operation_type.hpp"
+#include "duckdb/main/prepared_statement_data.hpp"
 
 duckdb::unique_ptr<duckdb::ArrowArrayStreamWrapper>
 ArrowStreamTestFactory::CreateStream(uintptr_t this_ptr, duckdb::ArrowStreamParameters &parameters) {
@@ -239,7 +240,7 @@ bool ArrowTestHelper::RunArrowComparison(Connection &con, const string &query, b
 		    config,
 		    [&batch_size](ClientConfig &config) {
 			    config.get_result_collector = [&batch_size](ClientContext &context,
-			                                                PreparedStatementData &data) -> PhysicalOperator & {
+			                                                PreparedStatementData &data) -> unique_ptr<PhysicalOperator> {
 				    return PhysicalArrowCollector::Create(context, data, batch_size);
 			    };
 		    },

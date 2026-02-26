@@ -550,9 +550,9 @@ ClientContext::PendingPreparedStatementInternal(ClientContextLock &lock,
 	statement_data.is_streaming = stream_result;
 
 	// Get the result collector and initialize the executor.
-	auto &collector = get_collector(*this, statement_data);
-	D_ASSERT(collector.type == PhysicalOperatorType::RESULT_COLLECTOR);
-	executor.Initialize(collector);
+	auto collector = get_collector(*this, statement_data);
+	D_ASSERT(collector->type == PhysicalOperatorType::RESULT_COLLECTOR);
+	executor.Initialize(std::move(collector));
 
 	auto types = executor.GetTypes();
 	D_ASSERT(types == statement_data.types);

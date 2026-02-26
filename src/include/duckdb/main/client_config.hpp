@@ -24,7 +24,8 @@ class ClientContext;
 class PhysicalResultCollector;
 class PreparedStatementData;
 
-typedef std::function<PhysicalOperator &(ClientContext &context, PreparedStatementData &data)> get_result_collector_t;
+typedef std::function<unique_ptr<PhysicalOperator>(ClientContext &context, PreparedStatementData &data)>
+    get_result_collector_t;
 
 struct ClientConfig {
 	//! The home directory used by the system (if any)
